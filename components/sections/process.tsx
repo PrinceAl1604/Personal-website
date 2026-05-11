@@ -98,7 +98,7 @@ function ProcessSticky() {
     offset: ["start start", "end end"],
   });
 
-  const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const progressScaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
     <section
@@ -125,8 +125,8 @@ function ProcessSticky() {
 
               <div className="relative h-1 w-32 bg-white/10 rounded-full overflow-hidden">
                 <motion.div
-                  className="absolute top-0 left-0 h-full bg-accent"
-                  style={{ width: progressWidth }}
+                  className="absolute inset-0 bg-accent origin-left"
+                  style={{ scaleX: progressScaleX }}
                 />
               </div>
             </div>
