@@ -5,6 +5,8 @@ import Lenis from "lenis";
 
 export function LenisProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    let frameId: number;
+    let stopped = false;
     const lenis = new Lenis({
       duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -12,13 +14,15 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
     });
 
     function raf(time: number) {
+      if (stopped) return;
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      frameId = requestAnimationFrame(raf);
     }
-    const id = requestAnimationFrame(raf);
+    frameId = requestAnimationFrame(raf);
 
     return () => {
-      cancelAnimationFrame(id);
+      stopped = true;
+      cancelAnimationFrame(frameId);
       lenis.destroy();
     };
   }, []);
