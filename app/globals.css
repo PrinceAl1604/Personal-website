@@ -1,26 +1,166 @@
+@import url("https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,900&display=swap");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ────────────────────────────────────────────────────────────
+   Design tokens — extracted 1:1 from archar.framer.website
+   Dark canvas + tight-tracked Switzer headlines + Inter body
+   + one electric-blue accent doing all the work.
+   Edit these and the whole site shifts.
+   ──────────────────────────────────────────────────────────── */
+
+@theme {
+  /* Surfaces */
+  --color-bg:          #000000;
+  --color-bg-card:     rgb(22 22 22);
+  --color-bg-light:    rgb(243 243 243);
+
+  /* Text scale (5 greys, foreground → most muted) */
+  --color-text:        #ffffff;
+  --color-text-2:      rgb(139 139 139);
+  --color-text-3:      rgb(112 112 112);
+  --color-text-4:      rgb(99 99 99);
+  --color-text-5:      rgb(65 65 65);
+
+  /* Accents */
+  --color-accent:        #0099ff;
+  --color-accent-hover:  #33adff;
+  --color-warm:          #ff6d10;
+
+  /* Hairlines */
+  --color-border:    rgb(255 255 255 / 0.08);
+  --color-border-2:  rgb(255 255 255 / 0.14);
+
+  /* Type families */
+  --font-display:  "Switzer", "Inter", system-ui, sans-serif;
+  --font-body:     "Inter", system-ui, sans-serif;
+
+  /* Type scale — exact Archer values */
+  --text-eyebrow:  0.875rem;   /* 14px */
+  --text-body:     1rem;       /* 16px */
+  --text-card:     2.25rem;    /* 36px */
+  --text-section:  2.875rem;   /* 46px */
+  --text-hero:     3.625rem;   /* 58px */
+  --text-stat:     11rem;      /* 176px — the giant 0+ counters */
+
+  /* Radius */
+  --radius-card:  10px;
+  --radius-pill:  100px;
+
+  /* Motion */
+  --ease-out-quart:  cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo:   cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ────────────────────────────────────────────────────────────
+   Base
+   ──────────────────────────────────────────────────────────── */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #000;
+}
+
+/* Lenis smooth-scroll resets — required for the library to work cleanly */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ────────────────────────────────────────────────────────────
+   Typography helpers — semantic class names so JSX stays clean
+   ──────────────────────────────────────────────────────────── */
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: var(--text-eyebrow);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--color-text-2);
+}
+
+.h-hero {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw + 1rem, var(--text-hero));
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+}
+
+.h-section {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw + 0.5rem, var(--text-section));
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+}
+
+.h-card {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.5vw + 0.5rem, var(--text-card));
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.body-muted {
+  color: var(--color-text-2);
+  line-height: 1.55;
+}
+
+/* Reusable pill button */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.125rem 1.875rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  color: #000;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  transition: background 200ms var(--ease-out-quart),
+              transform 300ms var(--ease-out-quart);
+}
+.btn-primary:hover {
+  background: var(--color-accent-hover);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.125rem 1.875rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border-2);
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  transition: border-color 200ms var(--ease-out-quart),
+              background 200ms var(--ease-out-quart);
+}
+.btn-ghost:hover {
+  border-color: var(--color-text);
+  background: rgb(255 255 255 / 0.04);
 }
